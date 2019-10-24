@@ -6,10 +6,45 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Pomodoro Clock</title>
     <link rel="stylesheet" href="../css/main.css">
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous">
+    </script>
 </head>
 <body>
-    
-
+    <div class="clock">
+        <div class="timer">
+            <div class="progress-radial step-0 session">
+                <div class="main-display overlay"></div>
+            </div>
+        </div>
+        <div class="session-info">
+            <div class="session-count">
+                <div class="time-session">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="settings">
+            <div class="time-session">
+                <h6>Session Time</h6>
+                <p class="time-session-display"></p>
+                <button class="minus">-</button>
+                <button class="plus">+</button>
+            </div>
+            <div class="time-break">
+                    <h6>Break Time</h6>
+                    <p class="time-session-display"></p>
+                    <button class="minus">-</button>
+                    <button class="plus">+</button>
+            </div>
+        </div>
+        <div class="controls">
+            <button class="time-start">Start</button>
+            <button class="time-reset">Reset</button>
+        </div>
+    </div>
 
 
 
