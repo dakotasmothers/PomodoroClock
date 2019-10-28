@@ -18,6 +18,12 @@ $(function () {
     $(".time-break .minus").click(function(){
         clock.changeBreakTime("subtract");
     });
+    $(".time-start").click(function(){
+        clock.toggleClock();
+    })
+    $(".time-reset").click(function(){
+        clock.reset();
+    })
 
 });
 
@@ -27,8 +33,10 @@ function Clock() {
         sessionTime = 1500,
         breakTime = 300,
         sessionCount = 0,
-        mode = "Session";
-        active = false;
+        mode = "Session",
+        active = false,
+        _this = this, //Reference to clock itself
+        timer;
     // Function to convert a number of seconds into a formatted time string
     function formatTime(secs) {
 
@@ -82,6 +90,7 @@ function Clock() {
     // Function to add or subtract from the session time whenever the plus or minus buttons are interacted with.
     this.changeSessionTime = function(command){
         if (!active){
+            this.reset();
             if (command === 'add'){
                 sessionTime += 60;
             } else if (sessionTime > 60){
@@ -95,6 +104,7 @@ function Clock() {
     }
     this.changeBreakTime = function(command){
         if (!active){
+            this.reset();
             if(command === "add"){
                 breakTime += 60;
             } else if (breakTime > 60){
@@ -102,5 +112,62 @@ function Clock() {
             }
             this.displayBreakTime();
         }
+    }
+    // Toggle the clock between
+    this.toggleClock = function(){
+        if(!active){
+            // Start the clock running
+            active = true;
+            if (sessionCount === 0){
+                sessionCount = 1;
+                this.displaySessionCount();
+            }
+            $(".time-start").text("Pause");
+            timer = setInterval(function(){
+                _this.stepDown();
+            }, 1000);
+        } else{
+            $('.time-start').text('Start');
+            active = false;
+            clearInterval(timer);
+        }
+        
+    }
+    this.stepDown = function(){
+        if(currentTime > 0){
+            currentTime--;
+            this.displayCurrentTime();
+            if(currentTime === 0){
+                if(mode === "Session"){
+                    mode = "Break";
+                    currentTime = breakTime;
+                    startTime = breakTime;
+                    this.displaySessionCount();
+                } else{
+                    mode = "Session";
+                    currentTime = sessionTime;
+                    startTime = sessionTime;
+                    sessionCount++;
+                    this.displaySessionCount();
+                }
+            }
+        }
+    }
+    //Function to reset the timer
+    this.reset = function(){
+        clearInterval(timer);
+        active = false;
+        // Reset the session count
+        mode = "Session";
+        // Reset the currentTime to the sessionTime
+        currentTime = sessionTime;
+        // Reset the sessionCOunt
+        sessionCount = 0;
+        // Make sure the text for the start/pause button is set to start
+        $('.time-start').text('Start');
+        // Display the correct currentTime, sessionTime, and sessionCount
+        this.displayCurrentTime();
+        this.displaySessionTime();
+        this.displaySessionCount();
     }
 }
